@@ -41,6 +41,24 @@ public class Main {
             }
         });
 
+        server.addHandler("POST", "/", (request, out) -> {
+//            String message = "Hello from POST";
+            String message = request.getBody();
+            try {
+                out.write((
+                        "HTTP/1.1 200 OK\r\n" +
+                                "Content-Type: " + "text/plain" + "\r\n" +
+                                "Content-Length: " + message.length() + "\r\n" +
+                                "Connection: close\r\n" +
+                                "\r\n"
+                ).getBytes());
+                out.write(message.getBytes());
+                out.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
 
         server.listen(8888);
     }
