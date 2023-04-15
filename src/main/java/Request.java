@@ -2,6 +2,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class Request {
     private final List<String> headers;
     private String body;
     private List<NameValuePair> queryParams;
+    private List<String> postParams;
 
     public Request(String[] requestLine, List<String> headers) {
         this.requestLine = requestLine;
@@ -58,9 +60,23 @@ public class Request {
         return queryParams;
     }
 
-    public List<NameValuePair> getQueryParam(String name) {
+    public List<String> getQueryParam(String name) {
         return queryParams.stream()
                 .filter(nameValuePair -> nameValuePair.getName().equals(name))
+                .map(NameValuePair::getValue)
+                .collect(Collectors.toList());
+    }
+
+    //x-www-form-urlencoded
+    public List<String> getPostParams() {
+        return Arrays.asList(body.split("&"));
+    }
+
+    public List<String> getPostParam(String name) {
+        List<String> postParams = getPostParams();
+        return postParams.stream()
+                .filter(s -> s.startsWith(name + "="))
+                .map(s -> s.substring(s.indexOf("=") + 1))
                 .collect(Collectors.toList());
     }
 }

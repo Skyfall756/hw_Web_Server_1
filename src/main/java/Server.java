@@ -40,8 +40,10 @@ public class Server {
                 badRequest(out);
                 return;
             }
-            System.out.println(request.getQueryParams());
-            System.out.println(request.getQueryParam("last"));
+//            System.out.println(request.getQueryParams());
+//            System.out.println(request.getQueryParam("last"));
+            System.out.println(request.getPostParams());
+            System.out.println(request.getPostParam("value"));
 
             Handler handler = findHandler(request);
             if (!(handler == null)) {
